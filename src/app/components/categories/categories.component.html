@@ -1,4 +1,31 @@
 <p>
   categories works!
-  {{data | async | json }}
 </p>
+<!-- >> {{data | json }} -->
+<br> >> {{ categoryList | json }}
+<button class="btn btn-lg btn-outline-primary" (click)="openCategory('ADD')">Launch demo modal</button>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">categoryID</th>
+      <th scope="col">categoryName</th>
+      <th scope="col">createdDate</th>
+      <th scope="col">createdBy</th>
+      <th scope="col">Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of categoryList; index as i">
+      <th scope="row"><button class="btn btn-lg btn-outline-primary" (click)="openCategory('EDIT',c.categoryID)">Edit #{{i+1}}</button> </th>
+      <td>{{c.categoryID}}</td>
+      <td>{{c.categoryName}}</td>
+      <td>{{c.createdDate}}</td>
+      <td>{{c.createdBy}}</td>
+      <td>
+        <button class="btn btn-lg btn-outline-primary" (click)="openCategory('DELETE',c.categoryID)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<!-- <br> >>   {{ categoryList[1].categoryID }} -->

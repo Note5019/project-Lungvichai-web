@@ -22,7 +22,7 @@ export class HttpService {
   get(endpoint){
     console.log(this.hostUrl+ endpoint);
     return this.http2.get(this.hostUrl+ endpoint, this.options).map(res =>{
-      console.log(res);
+      // console.log(res);
       return  res.json();
     });
   }
