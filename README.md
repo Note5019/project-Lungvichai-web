@@ -1,27 +1,40 @@
-# ProjectLungvichaiWeb
+# LungVichai 
+#### Start Project Date : 29-1-2019
+---
+### วิธีเพิ่ม bootstrap 
+1. npm install bootstrap@4 jquery --save
+2. go to file "angular.json"
+3. add location of bootstrap both "styles" and "scripts"
+```
+"styles": [
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css" <<< here
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.1.
+            ],
+"scripts": [
+            "node_modules/jquery/dist/jquery.min.js",             <<< here
+            "node_modules/bootstrap/dist/js/bootstrap.min.js"]    <<< here
+```
+https://stackoverflow.com/questions/50290197/how-to-add-bootstrap-in-angular-6-project
 
-## Development server
+---
+### วิธีเพิ่ม ngB
+1. npm install --save @ng-bootstrap/ng-bootstrap
+2. add to app.modules
+```
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';           <<< here
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+@NgModule({
+  ...
+  imports: [NgbModule, ...],                                    <<< here
+  ...
+})
+export class YourAppModule {
+}
+```
+https://ng-bootstrap.github.io/#/getting-started
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+---
+### Other
+- เพิ่ม FormModule
+> npm i @angular/forms
