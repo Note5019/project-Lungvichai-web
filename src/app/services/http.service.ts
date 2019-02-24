@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, RequestOptions, Http } from '@angular/http';
-// import { HttpClient } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http'; 
 import 'rxjs/add/operator/map';
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,8 @@ export class HttpService {
   options = new RequestOptions();
 
   constructor(
-    private http2: Http
+    private http2: Http,
+    private http: HttpClient
   ) {
     this.headers.append('Content-Type', 'application/x-www-form-urlencoded');
     this.options.headers = this.headers;
@@ -26,4 +27,5 @@ export class HttpService {
       return  res.json();
     });
   }
+
 }

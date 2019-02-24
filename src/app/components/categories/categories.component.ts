@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { Category } from 'src/app/models/category';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { CategoryModalComponent } from '../category-modal/category-modal.component';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-categories',
@@ -11,29 +11,53 @@ import { CategoryModalComponent } from '../category-modal/category-modal.compone
 })
 export class CategoriesComponent implements OnInit {
   categoryList: Category[] = [];
-  constructor(private http: HttpService,
-    private modalService: NgbModal) { }
+  isCardOpen: boolean = true;
+  categoryForm: FormGroup;
 
+  constructor(
+    private http: HttpService,
+    private fb: FormBuilder
+  ) { 
+    this.categoryForm = this.fb.group({
+      categoryID: [''],
+      categoryName: [''],
+      categoryDate: [this.splitDate(new Date().toISOString())],
+      categoryBy: [''],
+    });
+    console.log(this.splitDate(new Date().toISOString()));
+    
+  }
+  splitDate(str:string){
+    return str.split('T')[0];
+  }
   ngOnInit() {
     this.getCate();
-    // await (res) => {this.categoryList = this.data;}; 
-    console.log('cat', this.categoryList);
+    // console.log('cat', this.categoryList);
   }
 
   getCate() {
     this.http.get('categories').subscribe(res => {
       res.forEach(element => {
-        console.log('ele', element);
+        // console.log('ele', element);
         this.categoryList.push(element);
       });
       // this.categoryList = res;
-      console.log('data1', this.categoryList);
+      // console.log('data1', this.categoryList);
     });
   }
-  openCategory(option: string, categoryID?: string) {
-    const modalRef = this.modalService.open(CategoryModalComponent);
-    modalRef.componentInstance.option = option;
-    modalRef.componentInstance.categoryID = categoryID;
+  openCard(opt: string, id: string) {
+    this.isCardOpen = true;
+  }
+
+  closeCard() {
+    const isClose = confirm('Close?');
+    if (isClose) {
+      this.isCardOpen = false;
+    }
+  }
+
+  onSubmit(categoryForm:FormGroup){
+    console.log(categoryForm.value);
   }
 
 }
