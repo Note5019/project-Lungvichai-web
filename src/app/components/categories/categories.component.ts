@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { Category } from 'src/app/models/category';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
@@ -10,54 +9,93 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit {
-  categoryList: Category[] = [];
-  isCardOpen: boolean = true;
+  categoryList: Category[];
+  isCardOpen: boolean = false;
+  isAddOpt: boolean = undefined;
   categoryForm: FormGroup;
-
   constructor(
     private http: HttpService,
     private fb: FormBuilder
-  ) { 
+  ) {
     this.categoryForm = this.fb.group({
       categoryID: [''],
       categoryName: [''],
-      categoryDate: [this.splitDate(new Date().toISOString())],
-      categoryBy: [''],
+      createdDate: [this.splitDate(new Date().toISOString())],
+      createdBy: [''],
+      updatedDate: [this.splitDate(new Date().toISOString())],
+      updatedBy: [''],
     });
-    console.log(this.splitDate(new Date().toISOString()));
-    
+    // console.log(this.splitDate(new Date().toISOString()));
+
   }
-  splitDate(str:string){
+  splitDate(str: string) {
     return str.split('T')[0];
   }
   ngOnInit() {
     this.getCate();
-    // console.log('cat', this.categoryList);
   }
 
   getCate() {
-    this.http.get('categories').subscribe(res => {
-      res.forEach(element => {
-        // console.log('ele', element);
-        this.categoryList.push(element);
-      });
-      // this.categoryList = res;
-      // console.log('data1', this.categoryList);
+    this.http.get2('categories').subscribe({
+      next: (response: any[]) => {
+        this.categoryList = response.map((res) => {
+          return new Category(res);
+        });
+        // console.log(response);
+        // console.log(this.categoryList);
+      }
     });
   }
-  openCard(opt: string, id: string) {
-    this.isCardOpen = true;
-  }
 
-  closeCard() {
-    const isClose = confirm('Close?');
-    if (isClose) {
-      this.isCardOpen = false;
+  openCard(opt: string, selector: Category) {
+    this.isCardOpen = true;
+    if (opt == 'ADD') {
+      this.isAddOpt = true;
+      this.categoryForm.patchValue({
+        createdDate: this.splitDate(new Date().toISOString()),
+        updatedDate: this.splitDate(new Date().toISOString()),
+      });
+    }
+    else {
+      this.isAddOpt = false;
+      this.categoryForm.patchValue({
+        categoryID: selector.categoryID,
+        categoryName: selector.categoryName,
+        createdDate: selector.createdDate,
+        createdBy: selector.createdBy,
+        updatedDate: this.splitDate(new Date().toISOString()),
+        updatedBy: selector.updatedBy,
+      });
     }
   }
 
-  onSubmit(categoryForm:FormGroup){
-    console.log(categoryForm.value);
+  closeCard(categoryForm: FormGroup) {
+    console.log(categoryForm.pristine);
+
+    const isClose = (categoryForm.pristine) ? true : confirm('Close?');
+    if (isClose) {
+      this.isCardOpen = false;
+      this.isAddOpt = undefined;
+      categoryForm.reset();
+    }
+  }
+
+  onSubmit(categoryForm: FormGroup) {
+    const data = new Category(categoryForm.value);
+    console.log(data);
+    if(this.isAddOpt){
+      this.http.post('categories',data).subscribe({
+        next: (response:any) => {
+          console.log(response);
+        },
+        error: (err)=>{
+          console.log(err);
+        }
+      });
+    }
+    else{
+
+    }
   }
 
 }
