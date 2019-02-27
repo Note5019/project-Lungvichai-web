@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpService } from 'src/app/services/http.service';
 import { Category } from 'src/app/models/category';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CategoryModalComponent } from '../category-modal/category-modal.component';
 
 @Component({
   selector: 'app-categories',
@@ -10,27 +12,12 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class CategoriesComponent implements OnInit {
   categoryList: Category[];
-  isCardOpen: boolean = false;
-  isAddOpt: boolean = undefined;
-  categoryForm: FormGroup;
+
   constructor(
     private http: HttpService,
-    private fb: FormBuilder
-  ) {
-    this.categoryForm = this.fb.group({
-      categoryID: [''],
-      categoryName: [''],
-      createdDate: [this.splitDate(new Date().toISOString())],
-      createdBy: [''],
-      updatedDate: [this.splitDate(new Date().toISOString())],
-      updatedBy: [''],
-    });
-    // console.log(this.splitDate(new Date().toISOString()));
+    private modalService: NgbModal
+  ) { }
 
-  }
-  splitDate(str: string) {
-    return str.split('T')[0];
-  }
   ngOnInit() {
     this.getCate();
   }
@@ -41,61 +28,23 @@ export class CategoriesComponent implements OnInit {
         this.categoryList = response.map((res) => {
           return new Category(res);
         });
-        // console.log(response);
-        // console.log(this.categoryList);
       }
     });
   }
 
-  openCard(opt: string, selector: Category) {
-    this.isCardOpen = true;
-    if (opt == 'ADD') {
-      this.isAddOpt = true;
-      this.categoryForm.patchValue({
-        createdDate: this.splitDate(new Date().toISOString()),
-        updatedDate: this.splitDate(new Date().toISOString()),
+  openCategoryModal(opt: string, c?: Category) {
+    const modalRef = this.modalService.open(CategoryModalComponent, { size: 'lg' });
+    modalRef.result.then(
+      (result) => {
+        result();
+        // console.log(result, 'When user closes');
+        this.getCate();
+      },
+      (result) => {
+        // console.log(result, 'Backdrop click');
+        // this.getCate();
       });
-    }
-    else {
-      this.isAddOpt = false;
-      this.categoryForm.patchValue({
-        categoryID: selector.categoryID,
-        categoryName: selector.categoryName,
-        createdDate: selector.createdDate,
-        createdBy: selector.createdBy,
-        updatedDate: this.splitDate(new Date().toISOString()),
-        updatedBy: selector.updatedBy,
-      });
-    }
+    modalRef.componentInstance.operation = opt;
+    modalRef.componentInstance.selectedCategory = c;
   }
-
-  closeCard(categoryForm: FormGroup) {
-    console.log(categoryForm.pristine);
-
-    const isClose = (categoryForm.pristine) ? true : confirm('Close?');
-    if (isClose) {
-      this.isCardOpen = false;
-      this.isAddOpt = undefined;
-      categoryForm.reset();
-    }
-  }
-
-  onSubmit(categoryForm: FormGroup) {
-    const data = new Category(categoryForm.value);
-    console.log(data);
-    if(this.isAddOpt){
-      this.http.post('categories',data).subscribe({
-        next: (response:any) => {
-          console.log(response);
-        },
-        error: (err)=>{
-          console.log(err);
-        }
-      });
-    }
-    else{
-
-    }
-  }
-
 }

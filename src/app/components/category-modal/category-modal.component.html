@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{headerText}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="closeCategoryModal(categoryForm)">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form [formGroup]="categoryForm">
+    <div class="form-group">
+      <label for="Name">Category ID:</label>
+      <input type="text" class="form-control" id="Name" formControlName="categoryID">
+    </div>
+    <div class="form-group">
+      <label for="Name">Category Name:</label>
+      <input type="text" class="form-control" id="Name" formControlName="categoryName">
+    </div>
+    <!-- <div class="form-group">
+      <label for="createdDate">Created Date:</label>
+      <input type="date" class="form-control" id="createdDate" formControlName="createdDate">
+    </div> -->
+    <div class="form-group" *ngIf="operation == 'ADD'">
+      <label for="createdBy">Created By:</label>
+      <input type="text" class="form-control" id="createdBy" formControlName="createdBy">
+    </div>
+    <!-- <div class="form-group">
+      <label for="updatedDate">Updated Date:</label>
+      <input type="date" class="form-control" id="updatedDate" formControlName="updatedDate">
+    </div> -->
+    <div class="form-group" *ngIf="operation == 'EDIT'">
+      <label for="updatedBy">Updated By:</label>
+      <input type="text" class="form-control" id="updatedBy" formControlName="updatedBy">
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <div class="row">
+    <div class="col text-left" *ngIf="operation != 'ADD'">
+      <button type="button" class="btn btn-danger" (click)="deleteCategory(categoryForm)">Delete</button>
+    </div>
+    <div class="col text-right">
+      <button type="button" class="btn btn-primary" (click)="onSubmit(categoryForm)">Submit</button>
+      <!-- <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button> -->
+    </div>
+  </div>
+</div>

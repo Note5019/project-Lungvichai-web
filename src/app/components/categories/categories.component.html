@@ -5,57 +5,10 @@
         <h3>Categories <small>({{categoryList?.length}} items.)</small></h3>
       </div>
       <div class="col text-right">
-        <div *ngIf="!isCardOpen">
-          <button class="btn btn-lg btn-outline-primary" (click)="openCard('ADD')">Add</button>
-        </div>
-        <div *ngIf="isCardOpen">
-          <button type="button" class="btn btn-lg btn-outline-danger " (click)="closeCard(categoryForm)" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+        <button class="btn btn-lg btn-outline-primary" (click)="openCategoryModal('ADD')">Add</button>
       </div>
     </div>
 
-  </div>
-  <div *ngIf="isCardOpen">
-    <div class="card-body">
-      <form [formGroup]="categoryForm">
-        <div class="form-group">
-          <label for="Name">Category ID:</label>
-          <input type="text" class="form-control" id="Name" formControlName="categoryID">
-        </div>
-        <div class="form-group">
-          <label for="Name">Category Name:</label>
-          <input type="text" class="form-control" id="Name" formControlName="categoryName">
-        </div>
-        <div class="form-group">
-          <label for="createdDate">Created Date:</label>
-          <input type="date" class="form-control" id="createdDate" formControlName="createdDate">
-        </div>
-        <div class="form-group">
-          <label for="createdBy">Created By:</label>
-          <input type="text" class="form-control" id="createdBy" formControlName="createdBy">
-        </div>
-        <div class="form-group">
-          <label for="updatedDate">Updated Date:</label>
-          <input type="date" class="form-control" id="updatedDate" formControlName="updatedDate">
-        </div>
-        <div class="form-group">
-          <label for="updatedBy">Updated By:</label>
-          <input type="text" class="form-control" id="updatedBy" formControlName="updatedBy">
-        </div>
-      </form>
-    </div>
-    <div class="card-footer text-muted ">
-      <div class="row">
-        <div class="col text-left">
-          <button type="button" class="btn btn-primary" (click)="onSubmit(categoryForm)">Submit</button>
-        </div>
-        <div class="col text-right" *ngIf="!isAddOpt">
-          <button type="button" class="btn btn-danger">Delete</button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -82,7 +35,7 @@
       <td>{{c.updatedDate}}</td>
       <td>{{c.updatedBy}}</td>
       <td class="text-center">
-        <button class="btn btn-outline-primary" (click)="openCard('EDIT',c)">Edit #{{i+1}}</button>
+        <button class="btn btn-outline-primary" (click)="openCategoryModal('EDIT',c)">Edit #{{i+1}}</button>
         <!-- <button class="btn btn-lg btn-outline-primary" (click)="openCategory('DELETE',c.categoryID)">Delete</button> -->
       </td>
     </tr>

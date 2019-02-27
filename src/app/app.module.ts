@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { /*NgbModule,*/ NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CategoriesComponent } from './components/categories/categories.component';
@@ -9,20 +9,26 @@ import { HttpService } from './services/http.service';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/header/header.component';
+import { CategoryModalComponent } from './components/category-modal/category-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
     CategoriesComponent,
-    HeaderComponent
+    HeaderComponent,
+    CategoryModalComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpModule,
     HttpClientModule,
-    NgbModule,
+    // NgbModule,
+    NgbModalModule,
     FormsModule,
     ReactiveFormsModule
+  ],
+  entryComponents: [
+    CategoryModalComponent
   ],
   providers: [HttpService],
   bootstrap: [AppComponent]
